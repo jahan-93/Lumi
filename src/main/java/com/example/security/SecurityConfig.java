@@ -1,4 +1,4 @@
-package com.example.security.securityconfig;
+package com.example.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
             http
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(authz -> authz
-                            .requestMatchers("auth/register", "auth/login").permitAll()
+                            .requestMatchers("/Lumi/auth/register", "/Lumi/auth/login").permitAll()
                             .anyRequest().authenticated()
                     );
             //.httpBasic().disable();

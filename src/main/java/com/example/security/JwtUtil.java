@@ -1,4 +1,4 @@
-package com.example.security.JwtUtil;
+package com.example.security;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-
 
 @Component
 public class JwtUtil {

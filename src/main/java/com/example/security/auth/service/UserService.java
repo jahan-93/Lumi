@@ -1,8 +1,9 @@
-package com.example.security.userservice;
+package com.example.security.auth.service;
 
-import com.example.security.JwtUtil.JwtUtil;
-import com.example.security.repository.UserRepository;
-import com.example.security.user_entity.UserEntity;
+import com.example.security.JwtUtil;
+import com.example.security.auth.dto.AuthDTO;
+import com.example.security.auth.repository.UserRepository;
+import com.example.security.auth.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,27 +16,26 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void register(String email, String password, String name) {
-        if (userRepository.findByEmail(email).isPresent()) {
+    public void register(AuthDTO dto) {
+        if (userRepository.findByNickname(dto.getNickname()).isPresent()) {
             throw new RuntimeException("이미 가입된 이메일입니다.");
         }
 
         UserEntity user = new UserEntity();
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password)); // 비밀번호 암호화
-        user.setName(name);
+        user.setNickname(dto.getNickname());
+        user.setPassword(passwordEncoder.encode(dto.getPassword())); // 비밀번호 암호화
 
         userRepository.save(user);
     }
 
-    public String login(String email, String password) {
-        UserEntity user = userRepository.findByEmail(email)
+    public String login(AuthDTO dto) {
+        UserEntity user = userRepository.findByNickname(dto.getNickname())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자"));
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new RuntimeException("비밀번호가 틀렸습니다.");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        return jwtUtil.generateToken(user.getNickname());
     }
 }

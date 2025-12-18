@@ -1,9 +1,8 @@
-package com.example.security.user_entity;
+package com.example.security.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,13 +15,10 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    private String nickname;
 
-    @Column(nullable = false)
     private String password; // 암호화 저장
 
-    @Column(nullable = false)
     private String name;
 
     @ElementCollection(fetch = FetchType.EAGER)
